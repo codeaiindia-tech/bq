@@ -5,96 +5,108 @@ import React, { useEffect, useState } from "react"
 
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Pagination } from "swiper/modules"
-import { PiQuotesFill } from "react-icons/pi";
+import { PiQuotesFill } from "react-icons/pi"
 
 import "swiper/css"
 import "swiper/css/pagination"
 
 const Page5 = () => {
 
-    const [datas, setData] = useState<any[]>([])
+  const [datas, setData] = useState<any[]>([])
 
-    useEffect(() => {
-        const handleApi = async () => {
-            try {
+  useEffect(() => {
+    const handleApi = async () => {
+      try {
 
-                const response = await axios.get(
-                    "https://admin.tomedes.com/api/v1/get-reviews?page=1"
-                )
+        const response = await axios.get(
+          "https://admin.tomedes.com/api/v1/get-reviews?page=1"
+        )
 
-                // console.log("Response received:", response.data.data)
+        setData(response.data.data)
 
-                setData(response.data.data)
+      } catch (error: any) {
+        console.log("Error while fetching the api", error.message)
+      }
+    }
 
-            } catch (error: any) {
-                console.log("Error while fetching the api", error.message)
+    handleApi()
+  }, [])
+
+  return (
+    <div className="w-full py-16 px-6 lg:px-16">
+
+      {/* Heading */}
+      <div className="max-w-3xl">
+
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl text-blue-900 font-semibold">
+          What Our Customers Say
+        </h1>
+
+        <p className="mt-4 text-[#002348] text-sm sm:text-base">
+          Customer reviews reflect real experiences shared by clients about the
+          quality of services they received. They highlight satisfaction,
+          trust, and the overall impact of the service.
+        </p>
+
+      </div>
+
+      {/* Swiper */}
+      <div className="mt-12 ">
+
+        <Swiper
+          modules={[Pagination]}
+          spaceBetween={30}
+          slidesPerView={3}
+          pagination={{ clickable: true }}
+          style={
+            {
+              padding: "6vh 0vh"
             }
-        }
+          }
+          breakpoints={{
+            320: { slidesPerView: 1 },
+            640: { slidesPerView: 2 },
+          }}
 
-        handleApi()
-    }, [])
+        >
 
-    return (
-        <div className="w-full min-h-screen">
+          {datas.map((data: any) => (
+            <SwiperSlide key={data.ID}>
 
-            <h1 className="text-5xl text-blue-900 font-semibold pl-18 mt-10">
-                What Our Customers Say
-            </h1>
-            <p className="pl-18 pt-5 w-[60%] text-[#002348] ">Customer reviews reflect real experiences shared by clients about the quality of services they received. They highlight satisfaction, trust, and the overall impact of the service.</p>
-            <div className="w-full mt-7 p-12">
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 relative flex flex-col justify-between min-h-[220px] hover:shadow-2xl transition">
 
-                <Swiper
-                    modules={[Pagination]}
-                    spaceBetween={40}
-                    slidesPerView={3}
-                    pagination={{ clickable: true }}
-                    className=""
-                    style={
-                        {
-                            paddingTop: "7vh",
-                            paddingBottom: "7vh"
-                        }
-                    }
-                    breakpoints={{
-                        320: { slidesPerView: 1 },
-                        640: { slidesPerView: 2 },
-                        1024: { slidesPerView: 2 },
-                    }}
-                >
+       
+                <div className="w-10 h-10 bg-blue-500 absolute -top-5 right-4 rounded-full flex justify-center items-center z-10">
+                  <PiQuotesFill color="white" size={18} />
+                </div>
 
-                    {datas.map((data: any) => (
-                        <SwiperSlide key={data.ID}>
+      
+                <p className="text-gray-600 text-sm sm:text-base">
+                  {data.Reviews}
+                </p>
 
-                            <div className="bg-white h-[33vh] p-8 rounded-xl shadow-xl flex flex-col justify-between border-gray-200 border relative">
 
-                                <div className="w-[7vh] h-[7vh] bg-blue-500 absolute -top-[10%] -right-[1%] rounded-full flex justify-center items-center" >
-                                    <PiQuotesFill color="white"  size={22} />
-                                </div>
+                <div className="mt-6">
+                  <h1 className="font-semibold text-blue-900">
+                    {data.Name}
+                  </h1>
 
-                                <p className="text-gray-600">
-                                    {data.Reviews}
-                                </p>
+                  <p className="text-gray-500 text-sm">
+                    {data.Platform}
+                  </p>
+                </div>
 
-                                <div className="mt-5">
-                                    <h1 className="font-semibold">
-                                        {data.Name}
-                                    </h1>
-                                    <p className="text-gray-500 text-sm">
-                                        {data.Platform}
-                                    </p>
-                                </div>
+              </div>
 
-                            </div>
+            </SwiperSlide>
+          ))}
 
-                        </SwiperSlide>
-                    ))}
+        </Swiper>
 
-                </Swiper>
+      </div>
 
-            </div>
-
-        </div>
-    )
+    </div>
+  )
 }
 
 export default Page5
